@@ -120,7 +120,8 @@ function scrape_idealist_page(keyword, output_file){
 	casper.thenOpen(url,function(){
 		this.fill('form[name="search_form"]', {
 			'search_user_query' : keyword,
-			'search_type' : 'org'
+			'search_type' : 'org',
+			'search_location_name' : 'United States'
 		}, true);
 	});
 
