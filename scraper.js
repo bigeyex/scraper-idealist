@@ -27,12 +27,13 @@ function detail_in_csv(){
 	var result = 'Name,'+headers.join(',')+'\n';
 	for(var d in detail_set){
 		var record = detail_set[d];
+		if(record === null)continue;
 		result+='"'+d+'"';
 		for(var h in headers){
 			var field = headers[h];
 			result+=',';
 			if(field in record){
-				result+='"'+record[field]+'"';
+				result+='"'+record[field].replace('"', "'")+'"';
 			}
 		}
 		result += "\n";
@@ -138,6 +139,14 @@ function scrape_idealist_page(keyword, output_file){
 	casper.run();
 }
 
+function convert_to_csv(filename){
+	filename = filename + '.json'
+	if(fs.isFile(filename)){
+		detail_set = JSON.parse(fs.read(filename));
+		fs.write(filename+'.csv', detail_in_csv(), 'w');
+	}
+}
+
 function detail_idealist_page(list_file, username, password){
 	if(fs.isFile(list_file)){
 		org_set = JSON.parse(fs.read(list_file));
@@ -200,6 +209,8 @@ function login_idealist(username, password){
 }
 
 
+
+
 function main(){
 	switch(casper.cli.get(0)){
 		case 'scrape':
@@ -212,10 +223,11 @@ function main(){
 
 			detail_idealist_page(casper.cli.get(1), casper.cli.get(2), casper.cli.get(3));
 			break;
-		case 'login':
-			console.log('Logging in with '+casper.cli.get(1)+' password: '+casper.cli.get(2));
-			login_idealist(casper.cli.get(1),casper.cli.get(2));
+		case 'csv':
+			console.log('Converting to csv: '+casper.cli.get(1)+'.csv');
+			convert_to_csv(casper.cli.get(1));
 			break;
+
 
 	}
 	// casper.start();
