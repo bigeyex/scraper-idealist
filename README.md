@@ -1,7 +1,8 @@
 scraper-idealist
 ================
 
-scrap NGO information from idealist
+Scrape NGO information from idealist
+NOTICE: It only scrape NGO within United States.
 
 #Usage:
 
